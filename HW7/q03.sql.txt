@@ -1,0 +1,132 @@
+CREATE TABLE branch (
+                        branch_id serial primary key,
+                        branch_name VARCHAR(255),
+                        branch_city VARCHAR(255),
+                        assets INTEGER
+);
+CREATE TABLE customer (
+                          customer_id serial  primary key,
+                          customer_name VARCHAR(255),
+                          custumer_street VARCHAR(255),
+                          customer_city VARCHAR(255)
+);
+CREATE TABLE loan (
+                      loan_id serial  primary key,
+                      loan_number VARCHAR(255),
+                      branch_name VARCHAR(255),
+                      amount INTEGER
+
+);
+CREATE TABLE borrower (
+                          borrower_id serial  primary key,
+                          customer_name VARCHAR(255),
+                          loan_number VARCHAR(255)
+
+);
+CREATE TABLE account (
+                         account_id serial  primary key,
+                         account_number int,
+                         branch_name varchar(255),
+                         balance INTEGER
+
+);
+CREATE TABLE depositor (
+                           customer_id serial  primary key,
+                           customer_name varchar(255),
+                           account_number int
+
+);
+
+INSERT INTO branch (branch_name, branch_city, assets)
+values
+    ('branch1','city1',1000000),
+    ('branch2','city2',2000000),
+    ('branch3','city3',3000000);
+
+INSERT INTO customer(customer_name,custumer_street, customer_city)
+values
+    ('customer1','street1','city1'),
+    ('customer2','street1','city1'),
+    ('customer3','street1','city1');
+
+INSERT INTO loan(loan_number, branch_name, amount)
+values
+    (1,'branch1',5000),
+    (2,'branch2',5000),
+    (3,'branch3',5000),
+    (4,'branch1',110000),
+    (5,'branch2',120000);
+
+
+INSERT INTO borrower(customer_name, loan_number)
+values
+    ('customer1',1),
+    ('customer1',2),
+    ('customer1',3),
+    ('customer2',4),
+    ('customer2',5);
+
+INSERT INTO account(account_number,branch_name, balance)
+VALUES
+    (1,'branch1',10000),
+    (2,'branch2',20000),
+    (3,'branch3',30000),
+    (4,'branch1',40000),
+    (5,'branch2',50000),
+    (6,'branch3',60000);
+
+
+INSERT INTO depositor(customer_name, account_number)
+VALUES
+    ('customer1',1),
+    ('customer1',2),
+    ('customer1',3),
+    ('customer2',4),
+    ('customer2',5),
+    ('customer3',6);
+
+
+-- q01
+
+select c.customer_name,loan_number from customer c
+                    left join borrower b on c.customer_name = b.customer_name
+where loan_number is null;
+
+-- q02
+
+select c.customer_name,count(c.customer_name) count from customer c
+         left join customer cu on c.custumer_street = cu.custumer_street
+            left join customer cus on c.customer_city = cus.customer_city
+                group by c.customer_name
+                    having count(c.customer_name) > 1;
+-- q03
+
+select b.customer_name from borrower b
+                                left join loan l on b.loan_number = l.loan_number
+group by b.customer_name
+having count(b.customer_name) = (select count(*) from branch);
+
+-- q04
+
+select d.customer_name from account
+                                left join depositor d on account.account_number = d.account_number
+group by d.customer_name
+having count(d.customer_name) = (select count(*) from branch);
+
+-- q05
+select l.loan_number,l.branch_name,b.customer_name,l.amount from loan l
+                                                                     join borrower b on l.loan_number = b.loan_number
+where l.amount > 100000;
+
+-- q06
+
+select branch.branch_name,branch_city,assets from branch
+      join(select bc.branch_name from (select l.branch_name,count(b.customer_name) blc from loan l
+        join borrower b on l.loan_number = b.loan_number
+           group by l.branch_name) as bl join (select a.branch_name, count(d.customer_name) bcc from depositor d
+               join account a on d.account_number = a.account_number
+                   group by a.branch_name) as bc on bl.branch_name = bc.branch_name
+                      where bl.blc = bc.bcc) as result on result.branch_name = branch.branch_name;
+-- q07
+select branch_name,sum(amount) from loan
+group by branch_name
