@@ -64,23 +64,27 @@ public class Main {
 //        System.out.println(sortNums);
 //        Set<Integer> uniqueNumbers = new HashSet<>();
 //
-//        List<String> names = new ArrayList<>();
-//        Faker faker = new Faker();
-//        for (int i = 0; i < 5; i++) {
-//            names.add(faker.name().firstName());
-//        }
-//        String name = names.get(1);
-//        names.add(name);
-//        System.out.println(names);
-//        Collections.sort(names);
+        List<String> names = new ArrayList<>();
+        Faker faker = new Faker();
+        for (int i = 0; i < 5; i++) {
+            names.add(faker.name().firstName());
+        }
+        String name = names.get(1);
+        names.add(name);
+        System.out.println(names);
+        Collections.sort(names);
 //        System.out.println(names);
 //        Set<String> uniqueSet = new HashSet<>();
 //        for (String name1 : names){
 //            uniqueSet.add(name1);
 //        }
 //        System.out.println(uniqueSet);
-        Transaction transaction = new Transaction(TransactionType.Withdraw,30000);
-
-
+//        Transaction transaction = new Transaction(TransactionType.Withdraw,30000);
+//        Collection<String> names = new ArrayList<>();
+//        names.add("Ali");
+//        names.add("Alireza");
+//        names.add("MohammadAli");
+//        names.add("Neda");
+//        names.forEach(name -> System.out.println("Name "+name));
     }
 }

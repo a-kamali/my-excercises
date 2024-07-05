@@ -15,6 +15,8 @@ public class BankAccount {
     Double balance;
     List<Transaction> transactionList = new ArrayList<>();
 
+
+
     public BankAccount(Integer accountNumber, Double balance, List<Transaction> transactionList) {
         this.accountNumber = accountNumber;
         this.balance = balance;

@@ -10,7 +10,8 @@ public class Bank {
     public void createAccount(BankAccount bankAccount){
         accounts.put(bankAccount.getAccountNumber(),bankAccount);
     }
-    public void deposit(Double amount){
-        if()
-    }
+//    public void deposit(Double amount){
+//        if()
+//    }
+
 }
